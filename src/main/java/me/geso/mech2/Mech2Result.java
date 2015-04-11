@@ -1,7 +1,6 @@
 package me.geso.mech2;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -9,8 +8,6 @@ import org.apache.http.Header;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
 
@@ -33,19 +30,6 @@ public class Mech2Result {
 		this.request = request;
 		this.response = response;
 		this.mech2 = mech2;
-
-		if (request instanceof HttpHead) {
-			// Response of "HEAD" method doesn't have any body
-			return;
-		}
-
-		try {
-			byte[] body = EntityUtils.toByteArray(response.getEntity());
-			ByteArrayEntity entity = new ByteArrayEntity(body);
-			response.setEntity(entity);
-		} catch (IOException e) {
-			throw new UncheckedIOException(e);
-		}
 	}
 
 	/**
